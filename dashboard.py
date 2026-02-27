@@ -144,6 +144,7 @@ def api_metrics():
     return jsonify(metrics if metrics else [])
 
 
+# Agregar al final de dashboard.py
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     host = os.getenv('HOST', '0.0.0.0')
