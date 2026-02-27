@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@{{ bot_username }} • Analytics Intelligence Platform</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Color Psychology Based Palette */
+            --primary: #667eea;
+            /* Purple-Blue: Trust + Premium */
+            --secondary: #764ba2;
+            /* Deep Purple: Sophistication */
+            --accent-cyan: #00d4ff;
+            /* Cyan: Technology/Analytics */
+            --accent-purple: #c471ed;
+            /* Light Purple: Innovation */
+            --accent-pink: #f64f59;
+            /* Pink: Engagement */
+            --success: #10b981;
+            /* Green: Growth */
+            --warning: #f59e0b;
+            /* Amber: Attention */
+            --danger: #ef4444;
+            /* Red: Urgency */
+
+            /* Neutrals */
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --bg-card: rgba(26, 26, 46, 0.7);
+
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+
+            --border-subtle: rgba(100, 116, 235, 0.1);
+            --border-medium: rgba(100, 116, 235, 0.2);
+            --border-strong: rgba(100, 116, 235, 0.4);
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* Animated Gradient Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: gradient-shift 20s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Subtle Grid */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(102, 126, 234, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+        }
+
+        .orb-1 {
+            top: 10%;
+            left: 15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            top: 60%;
+            right: 10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%);
+            animation: float 30s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            bottom: 5%;
+            left: 45%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(50px, -80px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-30px, 60px) rotate(240deg);
+            }
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-subtle);
+            backdrop-filter: blur(40px) saturate(180%);
+            padding: 32px 24px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-md);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .brand-text h1 {
+            font-size: 1.5em;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 4px;
+        }
+
+        .nav-group {
+            margin-bottom: 36px;
+        }
+
+        .nav-label {
+            font-size: 0.7em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+            padding-left: 16px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 60%;
+            background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+            border-radius: 0 4px 4px 0;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active::before {
+            width: 4px;
+        }
+
+        .nav-icon {
+            font-size: 1.3em;
+            min-width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .status-panel {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid var(--border-medium);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 var(--success);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .status-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-info {
+            font-size: 0.75em;
+            color: var(--text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 4px;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 48px 56px;
+            max-width: 1920px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breadcrumb-sep {
+            opacity: 0.4;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-strong);
+        }
+
+        /* Page Header */
+        .page-head {
+            margin-bottom: 48px;
+        }
+
+        .page-title {
+            font-size: 3.5em;
+            font-weight: 900;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+            line-height: 1.1;
+        }
+
+        .page-desc {
+            font-size: 1.15em;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 800px;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transition: left 0.6s;
+        }
+
+        .stat:hover::before {
+            left: 100%;
+        }
+
+        .stat:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-6px);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+
+        .stat-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            position: relative;
+        }
+
+        .stat:nth-child(1) .stat-icon-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 101, 89, 0.15));
+            color: var(--accent-pink);
+        }
+
+        .stat:nth-child(2) .stat-icon-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(0, 212, 255, 0.15));
+            color: var(--accent-cyan);
+        }
+
+        .stat:nth-child(3) .stat-icon-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.15));
+            color: var(--success);
+        }
+
+        .trend-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: var(--success);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-change {
+            font-size: 0.9em;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        /* Charts */
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        .chart {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .chart:hover {
+            border-color: var(--border-medium);
+            box-shadow: var(--shadow-md);
+        }
+
+        .chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .chart-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-chip {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chart-container {
+            min-height: 350px;
+        }
+
+        /* Activity Feed */
+        .activity {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 40px;
+        }
+
+        .activity-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .activity-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .activity-filters {
+            display: flex;
+            gap: 8px;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 24px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(180deg, var(--primary), var(--accent-cyan));
+            transition: height 0.3s;
+            border-radius: 18px 0 0 18px;
+        }
+
+        .activity-item:hover {
+            border-color: var(--border-medium);
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateX(6px);
+        }
+
+        .activity-item:hover::before {
+            height: 100%;
+        }
+
+        .activity-body {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 0.95em;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .activity-date {
+            font-size: 0.8em;
+            color: var(--text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+            margin-left: 20px;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .meta-item:hover {
+            color: var(--text-primary);
+            transform: scale(1.05);
+        }
+
+        .activity-action {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 6px 14px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            transition: all 0.2s;
+            font-size: 0.85em;
+        }
+
+        .activity-action:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -300px;
+                z-index: 1000;
+            }
+
+            .main {
+                padding: 24px 20px;
+            }
+
+            .page-title {
+                font-size: 2.5em;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">🤖</div>
+                <div class="brand-text">
+                    <h1>Analytics</h1>
+                    <p>@{{ bot_username }}</p>
+                </div>
+            </div>
+
+            <nav>
+                <div class="nav-group">
+                    <div class="nav-label">Overview</div>
+                    <a href="#" class="nav-link active">
+                        <span class="nav-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">🎯</span>
+                        <span>Performance</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📉</span>
+                        <span>Reports</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-label">Content</div>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📡</span>
+                        <span>Live Feed</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">⭐</span>
+                        <span>Top Posts</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📅</span>
+                        <span>Schedule</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">🗂️</span>
+                        <span>Archive</span>
+                    </a>
+                </div>
+
+                <div class="nav-group">
+                    <div class="nav-label">Management</div>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">🔔</span>
+                        <span>Alerts</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">👥</span>
+                        <span>Team</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-panel">
+                    <div class="status-row">
+                        <div class="pulse-dot"></div>
+                        <div>
+                            <div class="status-label">System Online</div>
+                            <div class="status-info">All systems operational</div>
+                        </div>
+                    </div>
+                    <div class="status-row">
+                        <div style="width: 10px;"></div>
+                        <div>
+                            <div class="status-info">{{ last_update }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div class="topbar">
+                <div class="breadcrumb">
+                    <span>Home</span>
+                    <span class="breadcrumb-sep">/</span>
+                    <span>Dashboard</span>
+                    <span class="breadcrumb-sep">/</span>
+                    <span>Overview</span>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-secondary">
+                        <span>📥</span>
+                        <span>Export</span>
+                    </button>
+                    <button class="btn btn-primary">
+                        <span>📊</span>
+                        <span>New Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="page-head">
+                <h1 class="page-title">Performance Dashboard</h1>
+                <p class="page-desc">Real-time intelligence and comprehensive analytics for @{{ bot_username }}</p>
+            </div>
+
+            <section class="stats">
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon-box">❤️</div>
+                        <div class="trend-badge">
+                            <span>↑</span>
+                            <span>+32.5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-label">Total Engagement</div>
+                    <div class="stat-value">{{ "{:,}".format(total_likes) }}</div>
+                    <div class="stat-change">Likes from {{ metrics|length }} tweets</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon-box">🔁</div>
+                        <div class="trend-badge">
+                            <span>↑</span>
+                            <span>+24.8%</span>
+                        </div>
+                    </div>
+                    <div class="stat-label">Viral Coefficient</div>
+                    <div class="stat-value">{{ "{:,}".format(total_retweets) }}</div>
+                    <div class="stat-change">Retweets & amplification</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-top">
+                        <div class="stat-icon-box">👁️</div>
+                        <div class="trend-badge">
+                            <span>↑</span>
+                            <span>+41.2%</span>
+                        </div>
+                    </div>
+                    <div class="stat-label">Total Reach</div>
+                    <div class="stat-value">{{ "{:,}".format(total_views) }}</div>
+                    <div class="stat-change">Impressions delivered</div>
+                </div>
+            </section>
+
+            <section class="charts">
+                <div class="chart">
+                    <div class="chart-head">
+                        <h3 class="chart-title">Engagement Analytics</h3>
+                        <div class="chart-filters">
+                            <button class="filter-chip active">7D</button>
+                            <button class="filter-chip">30D</button>
+                            <button class="filter-chip">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="engagement-chart"></div>
+                </div>
+
+                <div class="chart">
+                    <div class="chart-head">
+                        <h3 class="chart-title">Impressions Growth</h3>
+                        <div class="chart-filters">
+                            <button class="filter-chip active">7D</button>
+                            <button class="filter-chip">30D</button>
+                            <button class="filter-chip">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="views-chart"></div>
+                </div>
+            </section>
+
+            <div class="chart">
+                <div class="chart-head">
+                    <h3 class="chart-title">Overall Performance Index</h3>
+                    <div class="chart-filters">
+                        <button class="filter-chip active">Combined</button>
+                        <button class="filter-chip">Individual</button>
+                    </div>
+                </div>
+                <div class="chart-container" id="total-chart"></div>
+            </div>
+
+            <section class="activity">
+                <div class="activity-head">
+                    <h2 class="activity-title">Recent Activity Stream</h2>
+                    <div class="activity-filters">
+                        <button class="filter-chip active">All</button>
+                        <button class="filter-chip">Trending</button>
+                        <button class="filter-chip">Recent</button>
+                    </div>
+                </div>
+
+                <div class="activity-list">
+                    {% for tweet in metrics %}
+                    <div class="activity-item">
+                        <div class="activity-body">
+                            <div class="activity-text">{{ tweet.text }}</div>
+                            <div class="activity-date">{{ tweet.created_at }}</div>
+                        </div>
+                        <div class="activity-meta">
+                            <div class="meta-item">
+                                <span>❤️</span>
+                                <span>{{ tweet.likes }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>🔁</span>
+                                <span>{{ tweet.retweets }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>💬</span>
+                                <span>{{ tweet.replies }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>👁️</span>
+                                <span>{{ tweet.views }}</span>
+                            </div>
+                            <a href="{{ tweet.url }}" target="_blank" class="activity-action">View Post →</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const config = {
+            responsive: true,
+            displayModeBar: false
+        };
+
+        const layout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(26, 26, 46, 0.3)',
+            font: {
+                family: 'Inter, sans-serif',
+                color: '#ffffff',
+                size: 11
+            },
+            xaxis: {
+                gridcolor: 'rgba(102, 126, 234, 0.08)',
+                zerolinecolor: 'rgba(102, 126, 234, 0.15)',
+                showgrid: true,
+                color: '#64748b'
+            },
+            yaxis: {
+                gridcolor: 'rgba(102, 126, 234, 0.08)',
+                zerolinecolor: 'rgba(102, 126, 234, 0.15)',
+                showgrid: true,
+                color: '#64748b'
+            },
+            margin: { t: 20, r: 20, b: 40, l: 50 },
+            showlegend: true,
+            legend: {
+                orientation: 'h',
+                y: -0.2,
+                x: 0.5,
+                xanchor: 'center',
+                font: { size: 10, color: '#94a3b8' }
+            }
+        };
+
+        // Engagement
+        let eng = {{ engagement_chart| safe }};
+        eng.layout = { ...eng.layout, ...layout };
+        eng.data.forEach((t, i) => {
+            t.marker = {
+                color: i === 0 ? '#f64f59' : '#00d4ff',
+                line: { color: i === 0 ? '#c471ed' : '#667eea', width: 1.5 },
+                opacity: 0.9
+            };
+        });
+        Plotly.newPlot('engagement-chart', eng.data, eng.layout, config);
+
+        // Views
+        let views = {{ views_chart| safe }};
+        views.layout = { ...views.layout, ...layout };
+        views.data[0].line = {
+            color: '#667eea',
+            width: 3,
+            shape: 'spline',
+            smoothing: 1.3
+        };
+        views.data[0].marker = {
+            color: '#667eea',
+            size: 8,
+            line: { color: '#00d4ff', width: 2 }
+        };
+        views.data[0].fill = 'tozeroy';
+        views.data[0].fillcolor = 'rgba(102, 126, 234, 0.15)';
+        Plotly.newPlot('views-chart', views.data, views.layout, config);
+
+        // Total
+        let total = {{ total_chart| safe }};
+        total.layout = { ...total.layout, ...layout };
+        total.data[0].marker = {
+            color: '#10b981',
+            line: { color: '#00d4ff', width: 1.5 },
+            opacity: 0.9
+        };
+        Plotly.newPlot('total-chart', total.data, total.layout, config);
+
+        setTimeout(() => location.reload(), 30000);
+    </script>
+</body>
+
+</html>
