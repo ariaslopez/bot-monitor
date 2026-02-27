@@ -1,0 +1,38 @@
+{
+  "name": "Bot Monitor Dashboard",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "editor.formatOnSave": true,
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
+  },
+  
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  
+  "remoteUser": "vscode",
+  
+  "forwardPorts": [5000],
+  
+  "portsAttributes": {
+    "5000": {
+      "label": "Dashboard",
+      "onAutoForward": "notify"
+    }
+  }
+}
