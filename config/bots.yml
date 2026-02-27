@@ -1,0 +1,9 @@
+# Configuración de Bots
+# Agrega todos los bots que quieras monitorear
+
+bots:
+  - handle: "AdaBotLive"                    # Handle sin @
+    display_name: "ADA Bot Live"              # Nombre para mostrar
+    description: "Bot de análisis de Cardano"  # Descripción
+    color: "#10B981"                          # Color verde para status
+    enabled: true                             # Activo/Inactivo
